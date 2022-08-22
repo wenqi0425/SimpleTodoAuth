@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SimpleTodoAuth.Data;
 using SimpleTodoAuth.Models;
+using SimpleTodoAuth.SimpleTodoDbContext;
 
 namespace SimpleTodoAuth.Controllers
 {
@@ -25,14 +25,14 @@ namespace SimpleTodoAuth.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoTaskModel>>> GetTodoTaskModel()
         {
-            return await _context.TodoTaskModel.ToListAsync();
+            return await _context.TodoTasks.ToListAsync();
         }
 
         // GET: api/TodoTask/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoTaskModel>> GetTodoTaskModel(int id)
         {
-            var todoTaskModel = await _context.TodoTaskModel.FindAsync(id);
+            var todoTaskModel = await _context.TodoTasks.FindAsync(id);
 
             if (todoTaskModel == null)
             {
@@ -80,7 +80,7 @@ namespace SimpleTodoAuth.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoTaskModel>> PostTodoTaskModel(TodoTaskModel todoTaskModel)
         {
-            _context.TodoTaskModel.Add(todoTaskModel);
+            _context.TodoTasks.Add(todoTaskModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTodoTaskModel", new { id = todoTaskModel.TaskId }, todoTaskModel);
@@ -90,13 +90,13 @@ namespace SimpleTodoAuth.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<TodoTaskModel>> DeleteTodoTaskModel(int id)
         {
-            var todoTaskModel = await _context.TodoTaskModel.FindAsync(id);
+            var todoTaskModel = await _context.TodoTasks.FindAsync(id);
             if (todoTaskModel == null)
             {
                 return NotFound();
             }
 
-            _context.TodoTaskModel.Remove(todoTaskModel);
+            _context.TodoTasks.Remove(todoTaskModel);
             await _context.SaveChangesAsync();
 
             return todoTaskModel;
@@ -104,7 +104,7 @@ namespace SimpleTodoAuth.Controllers
 
         private bool TodoTaskModelExists(int id)
         {
-            return _context.TodoTaskModel.Any(e => e.TaskId == id);
+            return _context.TodoTasks.Any(e => e.TaskId == id);
         }
     }
 }
