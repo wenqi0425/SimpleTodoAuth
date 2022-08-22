@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 
 using SimpleTodoAuth.SimpleTodoDbContext;
 using SimpleTodoAuth.Data;
+using Microsoft.AspNetCore.Identity;
+using SimpleTodoAuth.Authentication;
 
 namespace SimpleTodoAuth
 {
@@ -39,6 +41,11 @@ namespace SimpleTodoAuth
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SQLConnection")));
 
+            // Identity
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             // Authentication
             services.AddAuthentication(options =>
             {
@@ -46,17 +53,16 @@ namespace SimpleTodoAuth
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-
             .AddJwtBearer(options =>
             {
-                options.SaveToken = false;
+                options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],
                     ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
@@ -71,6 +77,8 @@ namespace SimpleTodoAuth
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 
