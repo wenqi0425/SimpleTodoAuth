@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 using SimpleTodoAuth.Authentication;
 using SimpleTodoAuth.Models;
@@ -49,7 +50,11 @@ namespace SimpleTodoAuth.Controllers
                     });
             };
 
-            return Ok(result);
+            return Ok(new Response
+            {
+                Status = "Success",
+                Message = "User created successfully"
+            });
         }
 
         [HttpPost]
@@ -95,6 +100,6 @@ namespace SimpleTodoAuth.Controllers
             }
 
             return Unauthorized();
-        }        
+        }
     }
 }
