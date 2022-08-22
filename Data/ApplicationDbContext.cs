@@ -7,9 +7,9 @@ using SimpleTodoAuth.Models;
 
 namespace SimpleTodoAuth.Data
 {
-    public class SimpleTodoAuthContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public SimpleTodoAuthContext (DbContextOptions<SimpleTodoAuthContext> options)
+        public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }

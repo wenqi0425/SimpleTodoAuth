@@ -14,9 +14,9 @@ namespace SimpleTodoAuth.Controllers
     [ApiController]
     public class TodoTaskController : ControllerBase
     {
-        private readonly SimpleTodoAuthContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TodoTaskController(SimpleTodoAuthContext context)
+        public TodoTaskController(ApplicationDbContext context)
         {
             _context = context;
         }

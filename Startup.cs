@@ -16,7 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-using SimpleTodoAuth.SimpleTodoDbContext;
 using SimpleTodoAuth.Data;
 using Microsoft.AspNetCore.Identity;
 using SimpleTodoAuth.Authentication;
@@ -38,7 +37,7 @@ namespace SimpleTodoAuth
             services.AddControllers();
 
             // Database
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<SimpleTodoDbContext.ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SQLConnection")));
 
             // Identity
