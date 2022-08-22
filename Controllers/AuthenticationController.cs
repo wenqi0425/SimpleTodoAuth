@@ -32,8 +32,25 @@ namespace SimpleTodoAuth.Controllers
             _configuration = configuration;
         }
 
-        
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            var result = await _userManager.FindByEmailAsync(model.Email);
 
+            if (result != null)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new Response
+                    {
+                        Status = "Error",
+                        Message = "User already exists!"
+                    });
+            };
+
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("login")]
@@ -78,26 +95,6 @@ namespace SimpleTodoAuth.Controllers
             }
 
             return Unauthorized();
-        }
-
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
-        {
-            var result = await _userManager.FindByEmailAsync(model.Email);
-
-            if (result != null)
-            {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new Response
-                    {
-                        Status = "Error",
-                        Message = "User already exists!"
-                    });
-            };
-
-            return Ok(result);
-        }
+        }        
     }
 }
