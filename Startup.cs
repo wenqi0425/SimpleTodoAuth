@@ -25,6 +25,7 @@ namespace SimpleTodoAuth
 {
     public class Startup
     {
+        public const string AllowAllPolicyName = "AllowAll";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,6 +37,12 @@ namespace SimpleTodoAuth
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            // CORS
+            services.AddCors(options => options.AddPolicy(AllowAllPolicyName,
+                builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()));
 
             // Database
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -81,6 +88,8 @@ namespace SimpleTodoAuth
             app.UseAuthentication();
 
             app.UseRouting();
+            
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
